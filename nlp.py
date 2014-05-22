@@ -3,7 +3,7 @@
 from nltk.tag.stanford import NERTagger
 
 # Set up NER Tagger
-st = NERTagger('/Users/jeharrison/Downloads/stanford-ner-2014-01-04/classifiers/english.all.3class.distsim.crf.ser.gz', '/Users/jeharrison/Downloads/stanford-ner-2014-01-04/stanford-ner.jar')
+st = NERTagger('./stanford-ner-2014-01-04/classifiers/english.all.3class.distsim.crf.ser.gz', './stanford-ner-2014-01-04/stanford-ner.jar')
 
 # Sample content
 content = """Ali is a young unaccompanied minor who arrived in the UK from Afghanistan in February 2009. He had been travelling with his brother but they had become separated and Ali ended up travelling here on his own. The separation from his brother was very traumatic for Ali and this has affected his mental health. As Ali was only 15 years old when he arrived he was accommodated in a Children’s Unit until he moved to Branston Court on 05/02/10.
