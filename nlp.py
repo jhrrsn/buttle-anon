@@ -48,7 +48,7 @@ def anonymise(content):
 # Prepare file for writing
 outloc = open(sys.argv[2], 'w')
 outwriter = csv.writer(outloc)
-header = [['id', 'statement', 'anon-statement']]
+header = [['id', 'anon-statement']]
 outwriter.writerows(header)
 
 # Open souce data file
@@ -61,7 +61,7 @@ for line in lines:
   if statement != '':
     statement_count += 1
     anonymised_statement = anonymise(statement)
-    outwriter.writerows([[_id, statement, anonymised_statement]])
+    outwriter.writerows([[_id, anonymised_statement]])
     break
 
 elapsed = (time.time() - start)
