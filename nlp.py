@@ -2,13 +2,18 @@
 import re, string, sys, time, csv
 from nltk.tag.stanford import NERTagger
 
+
+#########
+# Setup #
+#########
+
 # Record start time.
 start = time.time()
 
 # Take input file from command line.
 input_file = sys.argv[1]
 
-# Set up NER Tagger
+# Set up reference to NER Tagger
 st = NERTagger('./stanford-ner-2014-01-04/classifiers/english.all.3class.distsim.crf.ser.gz', './stanford-ner-2014-01-04/stanford-ner.jar')
 
 # Reporting stats
@@ -18,6 +23,10 @@ statement_count = 0
 # Setup regex
 regex = re.compile('[^\w\s\.]')
 
+
+#############################
+# Define anonymise function #
+#############################
 
 def anonymise(content):
   # Clean content
@@ -42,8 +51,9 @@ def anonymise(content):
   return ' '.join(output)
 
 
-######################
-######################
+################
+# Process data #
+################
 
 # Prepare file for writing
 outloc = open(sys.argv[2], 'w')
