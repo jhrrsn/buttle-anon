@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys, csv
+import re, string, sys, csv
 from nltk.tag.stanford import NERTagger
 
 # Take input file from command line.
@@ -12,17 +12,19 @@ st = NERTagger('./stanford-ner-2014-01-04/classifiers/english.all.3class.distsim
 total_count = 0
 statement_count = 0
 
+# Setup regex
+regex = re.compile('[^\w\s\.]')
+
+
 def anonymise(content):
   # Clean content
-  exclude = set(['!', '#', '"', '%', '$', "'", '&', ')', '(', '+', '*', '-', ';', ':', '=', '<', '?', '>', '@', '[', ']', '\\', '_', '^', '`', '{', '}', '|', '~'])
-  content = ''.join(ch for ch in content if ch not in exclude)
-  content = content.replace('’', '')
+  content = regex.sub(' ', content)
 
   # Split statement into lines
   no_newline_content = content.replace('\n', '')
   lines = no_newline_content.split('.')
 
-  people = []
+  output = []
 
   # Iterate through each sentence in the content, finding and replacing PERSONs, LOCATIONs & ORGANISATIONs with generic terms.
   for line in lines:
@@ -32,16 +34,31 @@ def anonymise(content):
       for i in range(len(tagged)):
         if tagged[i][1] != "O" and tagged[i][0] != 'UK':
             tokens[i] = '*****'
-      print ' '.join(tokens) + '.'
+      output.append(' '.join(tokens) + '.')
 
-# Open CSV file
+  return ' '.join(output)
+
+
+######################
+######################
+
+# Prepare file for writing
+outloc = open(sys.argv[2], 'w')
+outwriter = csv.writer(outloc)
+header = [['id', 'statement', 'anon-statement']]
+outwriter.writerows(header)
+
+# Open souce data file
 lines = csv.reader(open(input_file, 'rU'))
 headers = lines.next()
 for line in lines:
   statement = line[52]
+  _id = line[0]
   total_count += 1
   if statement != '':
     statement_count += 1
-    anonymise(statement)
+    anonymised_statement = anonymise(statement)
+    outwriter.writerows([[_id, statement, anonymised_statement]])
+    break
 
 print "%d of %d rows had a statement." % (statement_count, total_count)
