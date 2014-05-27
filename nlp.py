@@ -35,7 +35,7 @@ def anonymise(content):
       tokens = line.lstrip().split()
       tagged = st.tag(tokens)
       for i in range(len(tagged)):
-        if tagged[i][1] != "O" and tagged[i][0] != 'UK':
+        if tagged[i][1] != "O" and tagged[i][0] not in ['UK', 'England', 'Wales', 'Scotland', 'Ireland']:
             tokens[i] = '*****'
       output.append(' '.join(tokens) + '.')
 
