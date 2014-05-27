@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-import re, string, sys, csv
+import re, string, sys, time, csv
 from nltk.tag.stanford import NERTagger
+
+# Record start time.
+start = time.time()
 
 # Take input file from command line.
 input_file = sys.argv[1]
@@ -61,4 +64,7 @@ for line in lines:
     outwriter.writerows([[_id, statement, anonymised_statement]])
     break
 
-print "%d of %d rows had a statement." % (statement_count, total_count)
+elapsed = (time.time() - start)
+
+print "%d of %d rows had a supporting statement to process." % (statement_count, total_count)
+print "Processing took %d seconds to complete." % (elapsed)
