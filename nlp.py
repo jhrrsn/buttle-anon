@@ -62,7 +62,6 @@ for line in lines:
     statement_count += 1
     anonymised_statement = anonymise(statement)
     outwriter.writerows([[_id, anonymised_statement]])
-    break
 
 elapsed = (time.time() - start)
 
