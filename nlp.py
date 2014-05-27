@@ -64,12 +64,16 @@ outwriter.writerows(header)
 # Open souce data file
 lines = csv.reader(open(input_file, 'rU'))
 headers = lines.next()
+email_header = '0---------- INCOMING EMAIL MESSAGE ----------0'
 for line in lines:
   statement = line[52]
   _id = line[0]
   total_count += 1
   if statement != '':
     statement_count += 1
+    email_index = statement.find(email_header)
+    if email_index >= 0:
+      statement = statement[0:email_index]
     anonymised_statement = anonymise(statement)
     outwriter.writerows([[_id, anonymised_statement]])
 
