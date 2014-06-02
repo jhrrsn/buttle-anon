@@ -85,6 +85,9 @@ for line in lines:
   total_count += 1
   if statement != '':
     statement_count += 1
+    if statement_count % 5 == 0:
+      elapsed = (time.time() - start)
+      print "%d statements processed in %d seconds." % (statement_count, elapsed)
     email_index = statement.find(email_header)
     if email_index >= 0:
       statement = statement[0:email_index]
