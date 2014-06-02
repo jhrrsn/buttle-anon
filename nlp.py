@@ -19,6 +19,18 @@ statement_count = 0
 # Setup regex
 regex = re.compile('[^\w\s\.]')
 
+##################
+# Names Database #
+##################
+
+filename = "namesdb.dat"
+names = []
+
+for line in open(filename, 'r'):
+    item = line.rstrip() # strip off newline and any other trailing whitespace
+    name = item.split(',')[0]
+    names.append(name.lower())
+    names.append(name.lower() + 's')
 
 #############################
 # Define anonymise function #
@@ -57,7 +69,7 @@ def anonymise(content):
     if len(line) != 0:
       words = re.sub("[^\w]", " ",  line).split()
       for i in range(len(words)):
-        if words[i].lower() in nes:
+        if words[i].lower() in nes or words[i].lower() in names:
           words[i] = '____'
 
       processed.append(' '.join(words) + '.')
