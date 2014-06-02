@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-import re, string, sys, time, csv
-from nltk.tag.stanford import NERTagger
+import sys, time, re, csv, nltk
 
 
 #########
@@ -12,9 +11,6 @@ start = time.time()
 
 # Take input file from command line.
 input_file = sys.argv[1]
-
-# Set up reference to NER Tagger
-st = NERTagger('./stanford-ner-2014-01-04/classifiers/english.all.3class.distsim.crf.ser.gz', './stanford-ner-2014-01-04/stanford-ner.jar')
 
 # Reporting stats
 total_count = 0
@@ -29,26 +25,44 @@ regex = re.compile('[^\w\s\.]')
 #############################
 
 def anonymise(content):
-  # Clean content
+  # Split content into lines, strip punctuation.
   content = regex.sub(' ', content)
+  lines = content.split('.')
+  
+  # List of named entities in string.
+  nes = []
 
-  # Split statement into lines
-  no_newline_content = content.replace('\n', '')
-  lines = no_newline_content.split('.')
+  # Init output list
+  processed = []
 
-  output = []
-
-  # Iterate through each sentence in the content, finding and replacing PERSONs, LOCATIONs & ORGANISATIONs with generic terms.
+  # Search through the lines for NEs
   for line in lines:
-    if len(line) > 0:
-      tokens = line.lstrip().split()
-      tagged = st.tag(tokens)
-      for i in range(len(tagged)):
-        if tagged[i][1] != "O" and tagged[i][0] not in ['UK', 'England', 'Wales', 'Scotland', 'Ireland']:
-            tokens[i] = '*****'
-      output.append(' '.join(tokens) + '.')
+    tokens = nltk.word_tokenize(line)
+    pos_tags = nltk.pos_tag(tokens)
+    sentences = nltk.ne_chunk(pos_tags)
 
-  return ' '.join(output)
+    output = []
+
+    for i in range(len(sentences)):
+      if type(sentences[i]) == nltk.tree.Tree:
+        if type(sentences[i][0][0]) == str and sentences[i][0][0].lower() not in nes:
+          nes.append(sentences[i][0][0].lower())
+      elif sentences[i][0].lower() in ['mr', 'mrs', 'ms', 'miss', 'master']:
+        if i+1 < len(sentences):
+          if type(sentences[i+1][0]) == str and sentences[i+1][0].lower() not in nes:
+            nes.append(sentences[i+1][0].lower())
+
+  # Replace the NEs in each line with a blank line.
+  for line in lines:
+    if len(line) != 0:
+      words = re.sub("[^\w]", " ",  line).split()
+      for i in range(len(words)):
+        if words[i].lower() in nes:
+          words[i] = '____'
+
+      processed.append(' '.join(words) + '.')
+
+  return ' '.join(processed)
 
 
 ################
