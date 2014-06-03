@@ -26,8 +26,9 @@ regex = re.compile('[^\w\s\.]')
 filename = "namesdb.dat"
 names = []
 
+# Open names database and add possessive versions of each name
 for line in open(filename, 'r'):
-    item = line.rstrip() # strip off newline and any other trailing whitespace
+    item = line.rstrip() 
     name = item.split(',')[0]
     names.append(name.lower())
     names.append(name.lower() + 's')
@@ -91,22 +92,29 @@ outwriter.writerows(header)
 lines = csv.reader(open(input_file, 'rU'))
 headers = lines.next()
 email_header = '0---------- INCOMING EMAIL MESSAGE ----------0'
+
+# Read through lines and anonymise
 for line in lines:
   statement = line[52]
   _id = line[0]
   total_count += 1
+
   if statement != '':
     statement_count += 1
+
     if statement_count % 5 == 0:
       elapsed = (time.time() - start)
       print "%d statements processed in %d seconds." % (statement_count, elapsed)
     email_index = statement.find(email_header)
+    
     if email_index >= 0:
       statement = statement[0:email_index]
     anonymised_statement = anonymise(statement)
     outwriter.writerows([[_id, anonymised_statement]])
 
+# Calculate total runtime 
 elapsed = (time.time() - start)
 
+# Performance logging
 print "%d of %d rows had a supporting statement to process." % (statement_count, total_count)
 print "Processing took %d seconds to complete." % (elapsed)
