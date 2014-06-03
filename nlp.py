@@ -78,6 +78,30 @@ def anonymise(content):
   return ' '.join(processed)
 
 
+###############################################
+# Define simple name strip anonymise function #
+###############################################
+
+def simple_anonymise(content):
+  # Split content into lines, strip punctuation.
+  content = regex.sub(' ', content)
+  lines = content.split('.')
+
+  # Init output list
+  processed = []
+
+  # Replace the names in each line with a blank line.
+  for line in lines:
+    if len(line) != 0:
+      words = re.sub("[^\w]", " ",  line).split()
+      for i in range(len(words)):
+        if words[i].lower() in names:
+          words[i] = '____'
+
+      processed.append(' '.join(words) + '.')
+
+  return ' '.join(processed)
+
 ################
 # Process data #
 ################
@@ -85,7 +109,7 @@ def anonymise(content):
 # Prepare file for writing
 outloc = open(sys.argv[2], 'w')
 outwriter = csv.writer(outloc)
-header = [['id', 'anon-statement']]
+header = [['id', 'anon-request', 'anon-statement', 'anon-recommend']]
 outwriter.writerows(header)
 
 # Open souce data file
@@ -95,7 +119,9 @@ email_header = '0---------- INCOMING EMAIL MESSAGE ----------0'
 
 # Read through lines and anonymise
 for line in lines:
+  request = line[51]
   statement = line[52]
+  recommend = line[53]
   _id = line[0]
   total_count += 1
 
@@ -106,11 +132,13 @@ for line in lines:
       elapsed = (time.time() - start)
       print "%d statements processed in %d seconds." % (statement_count, elapsed)
     email_index = statement.find(email_header)
-    
     if email_index >= 0:
       statement = statement[0:email_index]
+    
+    anonymised_request = simple_anonymise(request)
     anonymised_statement = anonymise(statement)
-    outwriter.writerows([[_id, anonymised_statement]])
+    anonymised_recommend = simple_anonymise(recommend)
+    outwriter.writerows([[_id, anonymised_request, anonymised_statement, anonymised_recommend]])
 
 # Calculate total runtime 
 elapsed = (time.time() - start)
