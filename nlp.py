@@ -25,6 +25,7 @@ regex = re.compile('[^\w\s\.]')
 
 filename = "namesdb.dat"
 names = []
+first_names = []
 
 # Open names database and add possessive versions of each name
 for line in open(filename, 'r'):
@@ -32,6 +33,9 @@ for line in open(filename, 'r'):
     name = item.split(',')[0]
     names.append(name.lower())
     names.append(name.lower() + 's')
+    if item.split(',')[4] == '1' and name.lower() not in ['cash', 'grant', 'the', 'no', 'in', 'access', 'will', 'bunk', 'council', 'be', 'any', 'future', 'other', 'wa', 'not', 'doe', 'thi', 'baby']:
+      first_names.append(name.lower())
+      first_names.append(name.lower() + 's')
 
 #############################
 # Define anonymise function #
@@ -95,7 +99,7 @@ def simple_anonymise(content):
     if len(line) != 0:
       words = re.sub("[^\w]", " ",  line).split()
       for i in range(len(words)):
-        if words[i].lower() in names:
+        if words[i].lower() in first_names:
           words[i] = '____'
 
       processed.append(' '.join(words) + '.')
