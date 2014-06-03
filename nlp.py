@@ -33,7 +33,7 @@ for line in open(filename, 'r'):
     name = item.split(',')[0]
     names.append(name.lower())
     names.append(name.lower() + 's')
-    if item.split(',')[4] == '1' and name.lower() not in ['cash', 'grant', 'the', 'no', 'in', 'access', 'will', 'bunk', 'council', 'be', 'any', 'future', 'other', 'wa', 'not', 'doe', 'thi', 'baby']:
+    if item.split(',')[4] == '1' and name.lower() not in ['cash', 'grant', 'the', 'no', 'in', 'access', 'will', 'bunk', 'council', 'be', 'an', 'any', 'future', 'other', 'wa', 'not', 'doe', 'thi', 'baby', 'ha', 'had', 'so', 'son', 'her', 'him', 'lot', 'than', 'life', 'she', 'he', 'travel']:
       first_names.append(name.lower())
       first_names.append(name.lower() + 's')
 
