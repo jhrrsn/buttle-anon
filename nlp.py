@@ -26,6 +26,7 @@ regex = re.compile('[^\w\s\.]')
 filename = "namesdb.dat"
 names = []
 first_names = []
+ok_first = ['charity', 'paying', 'bank', 'morning', 'unborn', 'memory', 'trip', 'even', 'worn', 'fine', 'modest', 'les', 'more', 'mini', 'add', 'driver', 'fare', 'law', 'unknown', 'say', 'loan', 'rusty', 'said', 'harm', 'car', 'story', 'rural', 'down', 'foster', 'rehab', 'every', 'deal', 'shown', 'hope', 'camp', 'read', 'day', 'days', 'meet', 'me', 'you', 'able', 'or', 'argos', 'ever', 'friend', 'trust', 'hose', 'divan', 'low', 'cope', 'share', 'way', 'deep', 'nor', 'via', 'standard', 'general', 'special', 'wash', 'la', 'edas', 'iron', 'church', 'tag', 'park', 'nass', 'real', 'constant', 'mat', 'ward', 'wm', 'english', 'mr', 'ms', 'mrs', 'miss', 'master', 'like', 'case', 'soon', 'hoover', 'many', 'job', 'little', 'white', 'do', 'daily', 'free', 'boy', 'girl', 'male', 'female', 'cash', 'grant', 'the', 'no', 'in', 'access', 'will', 'bunk', 'council', 'be', 'an', 'any', 'future', 'other', 'wa', 'not', 'doe', 'thi', 'baby', 'ha', 'had', 'so', 'son', 'daughter', 'brother', 'sister', 'her', 'him', 'lot', 'than', 'life', 'she', 'he', 'travel', 'set', 'winter', 'summer', 'autumn', 'spring', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december', 'young', 'younger', 'can', 'care', 'heart', 'given', 'west', 'east', 'north', 'south', 'northern', 'southern', 'eastern', 'western', 'born', 'my', 'money', 'per', 'watt', 'normal', 'gates', 'man', 'woman']
 
 # Open names database and add possessive versions of each name
 for line in open(filename, 'r'):
@@ -33,7 +34,7 @@ for line in open(filename, 'r'):
     name = item.split(',')[0]
     names.append(name.lower())
     names.append(name.lower() + 's')
-    if item.split(',')[4] == '1' and name.lower() not in ['cash', 'grant', 'the', 'no', 'in', 'access', 'will', 'bunk', 'council', 'be', 'an', 'any', 'future', 'other', 'wa', 'not', 'doe', 'thi', 'baby', 'ha', 'had', 'so', 'son', 'her', 'him', 'lot', 'than', 'life', 'she', 'he', 'travel']:
+    if item.split(',')[4] == '1' and name.lower() not in ok_first:
       first_names.append(name.lower())
       first_names.append(name.lower() + 's')
 
